@@ -1,0 +1,43 @@
+Input and Sampling
+effective_points_per_view = 4096    Number of input points per view.
+validation_evaluation_seed = 42    Base evaluation sampling seed; the sample's zero-based split position is added at runtime.
+
+Network Architecture
+feature_dim = 256    Main feature dimension.
+tokens_per_view = 256    Number of context tokens per view.
+encoder_knn_k = 8    Number of neighbors for local feature extraction.
+encoder_multi_scale_k = [8, 16]    Neighborhood sizes for multi-scale feature extraction.
+transformer_layers = 2    Number of self-attention layers within each state.
+transformer_heads = 4    Number of self-attention heads within each state.
+num_experts = 4    Number of mixture-of-experts branches.
+registration_hidden_dim_effective = 256    Effective hidden dimension of the registration head.
+parameter_attention_heads = 2    Number of attention heads coupling the six registration parameters.
+segmentation_hidden_dim = 256    Hidden dimension of the segmentation head.
+segmentation_attention_heads = 4    Number of attention heads in the segmentation head.
+
+Neighborhood Aggregation and Volume Estimation
+neighbor_aggregation_k = 3    Number of neighbors aggregated per query point after registration.
+neighbor_sigma_normalized = 0.08    Gaussian kernel bandwidth for neighborhood weighting in normalized coordinates.
+volume_loss_sigma_mm = 100.0    Gaussian kernel bandwidth for surface interpolation in volume estimation, in mm.
+volume_loss_max_points = 1024    Maximum number of points per state used for volume estimation.
+trim_ratio = 0.9    Fraction of the smallest nearest-neighbor distances retained when computing registration distance.
+
+Training Settings
+optimizer = AdamW    Optimization algorithm.
+initial_lr = 0.0003    Initial learning rate.
+weight_decay = 0.0001    Weight decay coefficient.
+scheduler = CosineAnnealingLR    Learning rate scheduler.
+T_max_epochs = 100    Cosine annealing duration, in epochs.
+eta_min = 1.5e-05    Minimum learning rate.
+batch_size = 1    Number of samples per training batch.
+epochs_recorded = 100    Number of training epochs.
+dropout = 0.1    Dropout probability in the registration and segmentation heads; disabled during inference.
+
+Loss Weights
+reg_geom_weight = 2.0    Registration geometry loss weight.
+reg_param_weight = 1.0    Registration parameter loss weight.
+reg_transform_weight = 2.0    Registration transformation loss weight.
+seg_weight = 1.0    Segmentation loss weight.
+volume_loss_weight = 0.5    Volume supervision loss weight.
+seg_consistency_weight = 0.05    Segmentation consistency loss weight.
+boundary_loss_weight = 0.2    Boundary loss weight.
